@@ -14,34 +14,36 @@
   </body>
   <script>
     const number = parseInt(prompt("몇 명이 참가하나요?"));
-    const $button = document.querySelector("button");
-    const $word = document.querySelector("#word");
-    const $order = document.querySelector("#order");
-    let word; // 제시어
-    let newWord; // 새로 입력한 단어
+    if (number) {
+      const $button = document.querySelector("button");
+      const $word = document.querySelector("#word");
+      const $order = document.querySelector("#order");
+      let word; // 제시어
+      let newWord; // 새로 입력한 단어
 
-    const onClickBtn = () => {
-      // 제시어가 비어있는가?
-      // 혹은 올바른 단어를 썼는가?
-      if (!word || word[word.length - 1] === newWord[0]) {
-        word = newWord;
-        $word.textContent = word;
-        const order = Number($order.textContent);
-        if (order + 1 > number) {
-          $order.textContent = 1;
+      const onClickBtn = () => {
+        // 제시어가 비어있는가?
+        // 혹은 올바른 단어를 썼는가?
+        if (!word || word[word.length - 1] === newWord[0]) {
+          word = newWord;
+          $word.textContent = word;
+          const order = Number($order.textContent);
+          if (order + 1 > number) {
+            $order.textContent = 1;
+          } else {
+            $order.textContent = order + 1;
+          }
         } else {
-          $order.textContent = order + 1;
+          alert("올바르지 않은 단어입니다.");
         }
-      } else {
-        alert("올바르지 않은 단어입니다.");
-      }
-      $input.value = "";
-      $input.focus();
-    };
-    const onInput = (event) => {
-      newWord = event.target.value;
-    };
-    document.querySelector("input").addEventListener("input", onInput);
-    document.querySelector("button").addEventListener("button", onClickBtn);
+        $input.value = "";
+        $input.focus();
+      };
+      const onInput = (event) => {
+        newWord = event.target.value;
+      };
+      document.querySelector("input").addEventListener("input", onInput);
+      document.querySelector("button").addEventListener("click", onClickBtn);
+    }
   </script>
 </html>
