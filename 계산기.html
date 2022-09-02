@@ -33,21 +33,21 @@
     <input readonly id="operator" />
     <input readonly type="number" id="result" />
     <div class="row">
-      <button id="num-7"></button>
-      <button id="num-8"></button>
-      <button id="num-9"></button>
+      <button id="num-7">7</button>
+      <button id="num-8">8</button>
+      <button id="num-9">9</button>
       <button id="plus">+</button>
     </div>
     <div class="row">
-      <button id="num-4"></button>
-      <button id="num-5"></button>
-      <button id="num-6"></button>
+      <button id="num-4">4</button>
+      <button id="num-5">5</button>
+      <button id="num-6">6</button>
       <button id="minus">-</button>
     </div>
     <div class="row">
-      <button id="num-1"></button>
-      <button id="num-2"></button>
-      <button id="num-3"></button>
+      <button id="num-1">1</button>
+      <button id="num-2">2</button>
+      <button id="num-3">3</button>
       <button id="divide">/</button>
     </div>
     <div class="row">
@@ -74,6 +74,23 @@
       //   $result.value = parseInt(number);
       // };
 
+      // 달라지는 부분을 매개변수로 만들어라!
+      // event 매개변수는 브라우저가 주는 것임
+      // 클릭하면 브라우저가 onClickNumber(number)을 실행하면서 이벤트 객체를 같이 인수로 넣어주기 때문에, 매개변수로 넘어오는 것임
+      const onClickNumber = (event) => {
+        if (operator) {
+          // 비어있지 않다
+          if (!numTwo) {
+            $result.value = "";
+          }
+          numTwo += event.target.textContent;
+        } else {
+          // 비어있다
+          numOne += event.target.textContent;
+        }
+        $result.value = event.target.textContent;
+      };
+
       // addEventListner의 두번째 인자는 함수이다
       // 그런데 인자를 넣은 함수는 함수의 결과값인 undefined가 들어간 셈이다
       // 두번째 자리가 함수로 작동할 수 있도록, return으로 onClick 로직을 실행한다.
@@ -81,34 +98,31 @@
       // 이렇게 함수가 함수를 리턴하는 함수를 고차함수(high order function)라고 한다.
       // "{"와 "return"이 만나면 return 을 생략하고 익명함수를 넣어도 된다.
 
-      // 달라지는 부분을 매개변수로 만들어라!
-      // event 매개변수는 브라우저가 주는 것임
-      // 클릭하면 브라우저가 onClickNumber(number)을 실행하면서 이벤트 객체를 같이 인수로 넣어주기 때문에, 매개변수로 넘어오는 것임
-      const onClickNumber = (number) => (event) => {
-        if (operator) {
-          // 비어있지 않다
-          numTwo += parseInt(number);
-        } else {
-          // 비어있다
-          numOne += parseInt(number);
-        }
-        $result.value = parseInt(number);
-      };
+      // 고차함수를 왜 쓰는가?
+      // 함수의 중복을 없애기 위해서
 
-      document.querySelector("#num-0").addEventListener("click", onClickNumber("0"));
-      document.querySelector("#num-1").addEventListener("click", onClickNumber("1"));
-      document.querySelector("#num-2").addEventListener("click", onClickNumber("2"));
-      document.querySelector("#num-3").addEventListener("click", onClickNumber("3"));
-      document.querySelector("#num-4").addEventListener("click", onClickNumber("4"));
-      document.querySelector("#num-5").addEventListener("click", onClickNumber("5"));
-      document.querySelector("#num-6").addEventListener("click", onClickNumber("6"));
-      document.querySelector("#num-7").addEventListener("click", onClickNumber("7"));
-      document.querySelector("#num-8").addEventListener("click", onClickNumber("8"));
-      document.querySelector("#num-9").addEventListener("click", onClickNumber("9"));
-      document.querySelector("#plus").addEventListener("click", () => {});
-      document.querySelector("#minus").addEventListener("click", () => {});
-      document.querySelector("#divide").addEventListener("click", () => {});
-      document.querySelector("#multiply").addEventListener("click", () => {});
+      const onClickOperator = (op) => () => {
+        if (numOne) {
+          operator = op;
+          $operator.value = op;
+        } else {
+          alert("숫자를 먼저 입력하세요!");
+        }
+      };
+      document.querySelector("#num-0").addEventListener("click", onClickNumber);
+      document.querySelector("#num-1").addEventListener("click", onClickNumber);
+      document.querySelector("#num-2").addEventListener("click", onClickNumber);
+      document.querySelector("#num-3").addEventListener("click", onClickNumber);
+      document.querySelector("#num-4").addEventListener("click", onClickNumber);
+      document.querySelector("#num-5").addEventListener("click", onClickNumber);
+      document.querySelector("#num-6").addEventListener("click", onClickNumber);
+      document.querySelector("#num-7").addEventListener("click", onClickNumber);
+      document.querySelector("#num-8").addEventListener("click", onClickNumber);
+      document.querySelector("#num-9").addEventListener("click", onClickNumber);
+      document.querySelector("#plus").addEventListener("click", onClickOperator("+"));
+      document.querySelector("#minus").addEventListener("click", onClickOperator("-"));
+      document.querySelector("#divide").addEventListener("click", onClickOperator("/"));
+      document.querySelector("#multiply").addEventListener("click", onClickOperator("*"));
       document.querySelector("#calculate").addEventListener("click", () => {});
       document.querySelector("#clear").addEventListener("click", () => {});
     </script>
