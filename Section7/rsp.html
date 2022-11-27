@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>가위바위보</title>
+    <style>
+      #computer {
+        width: 142px;
+        height: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="computer"></div>
+    <div>
+      <button id="scissors" class="btn">가위</button>
+      <button id="rock" class="btn">바위</button>
+      <button id="paper" class="btn">보</button>
+    </div>
+    <div id="score"></div>
+    <script>
+      const $computer = document.querySelector("#computer");
+      const $scissors = document.querySelector("#scissors");
+      const $rock = document.querySelector("#rock");
+      const $paper = document.querySelector("#paper");
+      const $score = document.querySelector("#score");
+      const IMG_URL = "./rsp.png";
+      $computer.style.background = `url(${IMG_URL}) 0 0`;
+      $computer.style.backgroundSize = "auto 200px";
+
+      // 그룹화할 수 있는 변수들은 객체로 그룹화
+      const rspX = {
+        scissors: "0", // 가위
+        rock: "-220px", // 바위
+        paper: "-440px", // 보
+      };
+
+      let computerChoice = "scissors";
+      const changeComputerHand = () => {
+        if (computerChoice === "scissors") {
+          computerChoice = "rock";
+        } else if (computerChoice === "rock") {
+          computerChoice = "paper";
+        } else if (computerChoice === "paper") {
+          computerChoice = "scissors";
+        }
+        $computer.style.background = `url(${IMG_URL}) ${rspX[computerChoice]} 0`;
+        $computer.style.backgroundSize = "auto 200px";
+      };
+
+      let intervalId = setInterval(changeComputerHand, 50);
+
+      const scoreTable = {
+        rock: 0,
+        scissors: 1,
+        paper: -1,
+      };
+
+      // clickButton을 연속을 호출시 마지막으로 호출된 인터벌만 clear되는 버그로 인해 flag 변수 clickable로 true일때만 클릭 가능하도록 함
+      let clickable = true;
+      let computer = 0;
+      let me = 0;
+
+      const clickButton = () => {
+        if (clickable) {
+          clearInterval(intervalId);
+          clickable = false;
+          // 점수 계산 및 화면 표시
+          const myChoice =
+            event.target.textContent === "바위"
+              ? "rock"
+              : event.target.textContent === "가위"
+              ? "scissors"
+              : "paper";
+
+          const myScore = scoreTable[myChoice];
+          const computerScore = scoreTable[computerChoice];
+          const diff = myScore - computerScore;
+
+          let message;
+
+          // 2, -1 은 승리조건, -2,1 은 패배조건,
+          if ([2, -1].includes(diff)) {
+            me += 1;
+            message = "승리";
+          } else if ([-2, 1].includes(diff)) {
+            computer += 1;
+            message = "패배";
+          } else {
+            message = "무승부";
+          }
+
+          if (me >= 3) {
+            $score.textContent = `나의 승리 ${me} : ${computer}`;
+          } else if (computer >= 3) {
+            $score.textContent = `컴퓨터의 승리 ${me} : ${computer}`;
+          } else {
+            $score.textContent = `${message} ${me} : ${computer}`;
+            setTimeout(() => {
+              clickable = true;
+              intervalId = setInterval(changeComputerHand, 50);
+            }, 1000);
+          }
+        }
+      };
+
+      $rock.addEventListener("click", clickButton);
+      $scissors.addEventListener("click", clickButton);
+      $paper.addEventListener("click", clickButton);
+    </script>
+  </body>
+</html>
