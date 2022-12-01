@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #screen {
+        width: 300px;
+        height: 200px;
+        text-align: center;
+        user-select: none;
+      }
+      #screen.waiting {
+        background-color: aqua;
+      }
+      #screen.ready {
+        background-color: red;
+        color: white;
+      }
+      #screen.now {
+        background-color: greenyellow;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="screen" class="waiting">클릭해서 시작하세요</div>
+    <div id="result"></div>
+    <script>
+      const $screen = document.querySelector("#screen");
+      const $result = document.querySelector("#result");
+      const records = [];
+
+      let startTime;
+      let endTime;
+      $screen.addEventListener("click", (event) => {
+        if (event.target.classList.contains("waiting")) {
+          // 피랑
+          $screen.classList.remove("waiting");
+          $screen.classList.add("ready");
+          $screen.textContent = "초록색이 되면 클릭하세요";
+          // 클릭했을 때, 파랑에서 빨강으로 바뀌고
+          // 몇 초 뒤 초록색이 보이면서 카운트할 수 있도록
+          setTimeout(() => {
+            $screen.classList.remove("ready");
+            $screen.classList.add("now");
+            Screen.textContent = "클릭 하세요!";
+            // 첫 시간 재기
+            startTime = new Date();
+          }, [Math.floor(Math.random() * 1000 + 2000)]);
+        } else if (event.target.classList.contains("ready")) {
+          // 빨강
+        } else if (event.target.classList.contains("now")) {
+          // 초록
+          // 끝 시간 재기
+          endTime = new Date();
+          // 시간 차이 저장하기
+          const current = endTime - startTime;
+          records.push(current);
+          // a는 누적값, c는 현재값
+          const average = records.reduce((a, c) => a + c) / records.length;
+          $result.textContent = `현재 ${current}ms, 평균 : ${average}ms`;
+          startTime = null;
+          endTime = null;
+          $screen.classList.remove("now");
+          $screen.classList.add("waiting");
+          $screen.textContent = "클릭해서 시작하세요";
+        }
+      });
+    </script>
+  </body>
+</html>
